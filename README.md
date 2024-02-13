@@ -1,10 +1,8 @@
-# Gentoo 
+# req-res
 
 ### RESTful API Documentation
 
-Gentoo is a lightweight HTTP request and response service to assist frontend devs in visualizing the structure of their requests. This documentation offers an overview of available endpoints and their functionality, catering to various HTTP methods and request types such as GET, POST, PUT, and DELETE.
-
-## Endpoints
+req-res is a lightweight HTTP request and response service to assist frontend devs in visualizing the structure of their requests. This documentation offers an overview of available endpoints and their functionality, catering to various HTTP methods and request types such as GET, POST, PUT, and DELETE.
 
 ## Endpoints
 

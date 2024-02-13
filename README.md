@@ -1,6 +1,8 @@
-# Gentoo RESTful API Documentation
+# Gentoo 
 
-Gentoo is a lightweight REST API mock server designed to assist frontend teams in visualizing the structure of their requests. This documentation provides an overview of the available endpoints and their functionality.
+### RESTful API Documentation
+
+Gentoo is a lightweight HTTP request and response service to assist frontend devs in visualizing the structure of their requests. This documentation offers an overview of available endpoints and their functionality, catering to various HTTP methods and request types such as GET, POST, PUT, and DELETE.
 
 ## Endpoints
 
@@ -220,8 +222,25 @@ Content-Type: application/json
         "id": 123,
         "message": "test_message"
     },
-    "headers": []
+    "headers": [
+        {
+            "Content-Type": "application/json"
+        },
+        {
+            "Host": "example.com"
+        },
+        {
+            "User-Agent": "<request user agent header>"
+        },
+        {
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9"
+        },
+        {
+            "Custom-Header": "Custom Value"
+        }
+    ]
     }
+    
 ```
 
 
@@ -249,7 +268,7 @@ We welcome contributions in the following areas:
   
 ### Motivation
 
-The project started as a way for us to mock endpoints, mostly for testing purposes with my friend @Gee. We wanted to inspect the structure of our requests, including headers, query parameters, and body fields. So, I decided to create this project, and I hope it helps others too. We still actively use it in our development workflow.
+The project started as a way for us to mock endpoints, mostly for testing purposes with my friend @Gee. We wanted to inspect the structure of our requests, including headers, query parameters, and body fields. So, I decided to create this project, and I hope someone finds it helpful too. We still actively use it in our development workflow.
 
 
 

@@ -4,7 +4,7 @@ use std::env;
 pub fn load_config() {
     println!("Loading env variables...");
     dotenv().ok();
-    println!("Env ariables loaded")
+    println!("Env variables loaded")
 }
 
 pub fn app_port() -> u16 {

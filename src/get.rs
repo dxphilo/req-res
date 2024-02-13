@@ -45,7 +45,7 @@ pub async fn get_responder(req: HttpRequest, bytes: Bytes, query: Query<QParams>
         .queries(query)
         .headers(headers);
 
-    HttpResponse::Created().json(response_data)
+    HttpResponse::Ok().json(response_data)
 }
 
 #[cfg(test)]
@@ -57,16 +57,13 @@ mod tests {
     async fn test_get_responder() {
         let mut app = test::init_service(App::new().service(get_responder)).await;
 
-        let request_body = "Test request body";
-
-        let req = test::TestRequest::post()
-            .uri("/post?id=123&message=test_message")
-            .set_payload(request_body)
+        let req = test::TestRequest::get()
+            .uri("/get?id=123&message=test_message")
             .to_request();
 
         let resp = test::call_service(&mut app, req).await;
 
-        assert_eq!(resp.status(), StatusCode::CREATED);
+        assert_eq!(resp.status(), StatusCode::OK);
 
         // Read the response body
         let resp_body = test::read_body(resp).await;
@@ -82,8 +79,7 @@ mod tests {
         assert_eq!(query_params.id, Some(123));
         assert_eq!(query_params.message, Some("test_message".to_string()));
         assert_eq!(response_data.message, "Request successfull");
-        assert_eq!(response_data.status_code, "201");
-        assert_eq!(response_data.body_data, "Test request body");
+        assert_eq!(response_data.status_code, "200");
     }
 
     #[test]

@@ -45,8 +45,7 @@ pub async fn get_responder(req: HttpRequest, bytes: Bytes, query: Query<QParams>
         .queries(query)
         .headers(headers);
 
-    let json_string = serde_json::to_string_pretty(&response_data).unwrap();
-    HttpResponse::Ok().json(json_string)
+    HttpResponse::Ok().json(response_data)
 }
 
 #[cfg(test)]

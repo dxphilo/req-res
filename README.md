@@ -136,7 +136,13 @@ We welcome contributions in the following areas:
 - Code optimizations
 - Performance improvements
 - Tests
-  
+
+# TODO
+
+- Mock Data Generation: Provide tools to generate realistic mock data for responses, including random data generation, predefined templates, and support for complex data structures.
+
+- Rate Limiting and Throttling: Add support for rate limiting and throttling to prevent abuse and ensure fair usage of the service.
+
 ### Motivation
 
 The project started as a way for us to mock endpoints, mostly for testing purposes with my friend @Gee. We wanted to inspect the structure of our requests, including headers, query parameters, and body fields. So, I decided to create this project, and I hope someone finds it helpful too. We still actively use it in our development workflow.

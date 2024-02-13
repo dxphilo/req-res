@@ -70,3 +70,71 @@ impl<'a> ResponseData<'a> {
         self
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use actix_web::http::header;
+    use actix_web::test::TestRequest;
+
+    #[test]
+    fn test_get_req_headers() {
+        // Create a test HttpRequest with some headers
+        let req = TestRequest::default()
+            .insert_header((header::CONTENT_TYPE, "application/json"))
+            .insert_header((header::USER_AGENT, "Actix-Web"))
+            .to_http_request();
+
+        // Call the function to get request headers
+        let headers = get_req_headers(&req);
+
+        // Assert the expected headers are present
+        assert_eq!(headers.len(), 2);
+        assert_eq!(headers[0], ("content-type", "application/json"));
+        assert_eq!(headers[1], ("user-agent", "Actix-Web"));
+    }
+
+    #[test]
+    fn test_get_body_data() {
+        // Create a test Bytes object
+        let bytes = Bytes::from("Test body data");
+
+        // Call the function to get body data
+        let body_data = get_body_data(&bytes);
+
+        // Assert the expected body data
+        assert_eq!(body_data, "Test body data");
+    }
+
+    #[test]
+    fn test_response_data_builder() {
+        // Create a sample Query<QParams>
+        let query_params = Query(QParams {
+            id: Some(123),
+            message: Some("Test message".to_string()),
+        });
+
+        // Call the ResponseData builder methods
+        let response_data = ResponseData::new()
+            .message("Custom message")
+            .status_code("404".to_string())
+            .body("Custom body".into())
+            .queries(query_params)
+            .headers(vec![("content-type", "application/json")]);
+
+        // Assert the attributes of the ResponseData
+        assert_eq!(response_data.message, "Custom message");
+        assert_eq!(response_data.status_code, "404");
+        assert_eq!(response_data.body_data, "Custom body");
+        assert_eq!(response_data.queries.id, Some(123));
+        assert_eq!(
+            response_data.queries.message,
+            Some("Test message".to_string())
+        );
+        assert_eq!(response_data.headers.len(), 1);
+        assert_eq!(
+            response_data.headers[0],
+            ("content-type", "application/json")
+        );
+    }
+}

@@ -6,210 +6,85 @@ Gentoo is a lightweight HTTP request and response service to assist frontend dev
 
 ## Endpoints
 
-### GET /
+## Endpoints
 
-This endpoint performs a health check on the Gentoo server.
+### GET /health
+
+Perform a health check on the Gentoo server.
 
 #### Request
 
+- URL: [https://mock-api-stkk.onrender.com](https://mock-api-stkk.onrender.com)
 - Method: GET
-- Path: /
 
 #### Response
 
-Upon successful execution, the server responds with an HTTP status code of 200 OK and a JSON object containing information about the Gentoo project, similar to the `/get` endpoint.
-
-## Example Usage
-
-### Test Endpoint
-
-
-
-### Response Format
+- Status Code: 200 OK
+- Body: JSON object containing information about the Gentoo project
 
 ### GET /get
 
-This endpoint retrieves a success response containing information about the Gentoo project.
+Retrieve information about the Gentoo project.
 
 #### Request
 
+- URL: [https://mock-api-stkk.onrender.com/get](https://mock-api-stkk.onrender.com/get)
 - Method: GET
-- Path: /get
 
 #### Response
 
-Upon successful execution, the server responds with an HTTP status code of 200 OK and a JSON object containing information about the Gentoo project.
+- Status Code: 200 OK
+- Body: JSON object containing information about the Gentoo project
 
-#### Response Body
+### POST /post
 
-The response body contains the following fields:
+Send a POST request to the server.
 
-- `name`: The name of the Gentoo project.
-- `about`: A brief description of the project.
-- `created_by`: The name of the creator of the project.
-- `message`: A message indicating the success of the request.
-- `status_code`: The HTTP status code of the response.
+#### Request
 
-
-## Endpoint: POST /post
-
-This endpoint allows clients to send a POST request to the server.
-
-### Request
-
+- URL: [https://mock-api-stkk.onrender.com/post](https://mock-api-stkk.onrender.com/post)
 - Method: POST
-- Path: /post
-
-#### Request Body
-
-The request body should contain the data to be processed by the server.
-
-#### Query Parameters
-
-The query parameters should be included in the URL.
-
-### Response
-
-Upon successful execution, the server responds with an HTTP status code of 201 Created and a JSON object containing information about the request.
-
-#### Response Body
-
-The response body contains the following fields:
-
-- `message`: A message indicating the success of the request.
-- `status_code`: The HTTP status code of the response.
-- `body`: The data received in the request body.
-- `queries`: The query parameters received in the request URL.
-- `headers`: The headers received in the request.
-
-## Example Usage
-
-### Request
-
-```http
-POST /post?id=123&message=test_message HTTP/1.1
-Content-Type: application/json
-
-{"key": "value"}
-
-```
-
-
+- Body: Data to be processed by the server
 
 #### Response
 
-```json
-    {
-    "message": "Request successfull",
-    "status_code": "200",
-    "body_data": "{\"id\":\"12345\",\"name\":\"User name\"}",
-    "queries": {"id":123,"message":"test_message"},
-    "headers": [["content-type","application/json"]]
-    }
-```
+- Status Code: 201 Created
+- Body: JSON object containing information about the request
 
+### PUT /put
 
-## Endpoint: PUT /put
+Send a PUT request to the server.
 
-This endpoint allows clients to send a PUT request to the server.
+#### Request
 
-### Request
-
+- URL: [https://mock-api-stkk.onrender.com/put](https://mock-api-stkk.onrender.com/put)
 - Method: PUT
-- Path: /put
+- Body: Data to be processed by the server
 
-#### Request Body
+#### Response
 
-The request body should contain the data to be processed by the server.
+- Status Code: 200 OK
+- Body: JSON object containing information about the request
 
-#### Query Parameters
+### DELETE /delete
 
-The query parameters should be included in the URL.
+Delete a resource.
 
-### Response
+#### Request
 
-Upon successful execution, the server responds with an HTTP status code of 200 OK and a JSON object containing information about the request.
-
-#### Response Body
-
-The response body contains the following fields:
-
-- `message`: A message indicating the success of the request.
-- `status_code`: The HTTP status code of the response.
-- `body`: The data received in the request body.
-- `queries`: The query parameters received in the request URL.
-- `headers`: The headers received in the request.
-
-## Example Usage
-
-### Request
-
-```http
-PUT /put?id=123&message=test_message HTTP/1.1
-Content-Type: application/json
-
-{"key": "value"}
-
-```
-
-
-### Response
-
-```json
-    {
-        "message": "Request successful",
-        "status_code": "200",
-        "body": {
-            "key": "value"
-        },
-        "queries": {
-            "id": 123,
-            "message": "test_message"
-        },
-        "headers": [
-            {
-            "name": "Content-Type",
-            "value": "application/json"
-            }
-        ]
-    }
-```
-
-
-## DELETE /delete
-
-Mock endpoint to delete a resource.
-
-### Request
-
+- URL: [https://mock-api-stkk.onrender.com/delete](https://mock-api-stkk.onrender.com/delete)
 - Method: DELETE
-- Path: `/delete`
 - Headers:
   - Content-Type: application/json
 - Query Parameters:
-  - id: The identifier of the resource (integer)
-  - message: A message related to the request (string)
+  - id: integer (identifier of the resource)
+  - message: string (message related to the request)
 - Body: JSON data representing the resource to be deleted
 
-Example Request:
-```http
-DELETE /delete?id=123&message=test_message HTTP/1.1
-Content-Type: application/json
-
-{"key": "value"}
-```
-
-### Response
+#### Response
 
 - Status Code: 200 OK
-- Headers: None
-- message: A message indicating the success of the request
-- status_code: The status code of the response (string)
-- body_data: The data sent in the request body (JSON object)
-- queries: The query parameters sent with the request (JSON object)
-- headers: All the headers sent with the request (JSON object)
-
-### Example Response:
+- Body: JSON object containing information about the request
 
 ```json
     {
@@ -235,9 +110,7 @@ Content-Type: application/json
         {
             "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9"
         },
-        {
-            "Custom-Header": "Custom Value"
-        }
+        // { ... all headers in the request `}
     ]
     }
     

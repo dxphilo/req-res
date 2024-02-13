@@ -1,4 +1,9 @@
-use actix_web::{get, HttpResponse};
+use crate::utils::{get_body_data, get_req_headers, QParams, ResponseData};
+use actix_web::{
+    get,
+    web::{Bytes, Query},
+    HttpRequest, HttpResponse,
+};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -22,35 +27,63 @@ impl SuccessResponse {
     }
 }
 
-#[get("/get")]
-pub async fn get_responder() -> HttpResponse {
-    HttpResponse::Ok().json(SuccessResponse::new())
-}
-
 #[get("/")]
 pub async fn health_check() -> HttpResponse {
     HttpResponse::Ok().json(SuccessResponse::new())
 }
 
+#[get("/get")]
+pub async fn get_responder(req: HttpRequest, bytes: Bytes, query: Query<QParams>) -> HttpResponse {
+    let body_data = get_body_data(&bytes);
+
+    let headers = get_req_headers(&req);
+
+    let response_data = ResponseData::new()
+        .message("Request successfull")
+        .status_code("200".to_string())
+        .body(body_data)
+        .queries(query)
+        .headers(headers);
+
+    HttpResponse::Created().json(response_data)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
-    use actix_web::{test, App};
+    use actix_web::{http::StatusCode, test, App};
 
     #[test]
     async fn test_get_responder() {
         let mut app = test::init_service(App::new().service(get_responder)).await;
 
-        let req = test::TestRequest::get().uri("/get").to_request();
+        let request_body = "Test request body";
 
-        // Send the request to the service
-        let resp: SuccessResponse = test::call_and_read_body_json(&mut app, req).await;
+        let req = test::TestRequest::post()
+            .uri("/post?id=123&message=test_message")
+            .set_payload(request_body)
+            .to_request();
 
-        assert_eq!(resp.status_code, 200);
-        assert_eq!(resp.message, "Success");
-        assert_eq!(resp.name, "Welcome to Gentoo");
-        assert_eq!(resp.about, "Lightweight Rest API Mock Client");
-        assert_eq!(resp.created_by, "John Philip");
+        let resp = test::call_service(&mut app, req).await;
+
+        assert_eq!(resp.status(), StatusCode::CREATED);
+
+        // Read the response body
+        let resp_body = test::read_body(resp).await;
+
+        let response_data: ResponseData =
+            serde_json::from_slice(&resp_body).expect("Failed to parse response body");
+
+        let query_params = QParams {
+            id: Some(123),
+            message: Some("test_message".to_string()),
+        };
+
+        assert_eq!(query_params.id, Some(123));
+        assert_eq!(query_params.message, Some("test_message".to_string()));
+        assert_eq!(response_data.message, "Request successfull");
+        assert_eq!(response_data.status_code, "201");
+        assert_eq!(response_data.body_data, "Test request body");
     }
 
     #[test]

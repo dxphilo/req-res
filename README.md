@@ -1,7 +1,5 @@
 # req-res
 
-### RESTful API Documentation
-
 req-res is a lightweight HTTP request and response service to assist frontend devs in visualizing the structure of their requests. This documentation offers an overview of available endpoints and their functionality, catering to various HTTP methods and request types such as GET, POST, PUT, and DELETE.
 
 ## Endpoints
@@ -137,13 +135,13 @@ We welcome contributions in the following areas:
 - Performance improvements
 - Tests
 
-# TODO
+#### TODO
 
 - Mock Data Generation: Provide tools to generate realistic mock data for responses, including random data generation, predefined templates, and support for complex data structures.
 
 - Rate Limiting and Throttling: Add support for rate limiting and throttling to prevent abuse and ensure fair usage of the service.
 
-### Motivation
+#### Motivation
 
 The project started as a way for us to mock endpoints, mostly for testing purposes with my friend @Gee. We wanted to inspect the structure of our requests, including headers, query parameters, and body fields. So, I decided to create this project, and I hope someone finds it helpful too. We still actively use it in our development workflow.
 

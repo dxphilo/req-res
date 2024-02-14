@@ -14,6 +14,7 @@ pub async fn post_responder(req: HttpRequest, bytes: Bytes, query: Query<QParams
     let response_data = ResponseData::new()
         .message("Request successfull")
         .status_code("201".to_string())
+        .method(crate::utils::Method::POST)
         .body(body_data)
         .queries(query)
         .headers(headers);

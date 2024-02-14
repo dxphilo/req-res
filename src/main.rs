@@ -18,6 +18,7 @@ async fn main() -> std::io::Result<()> {
     load_config();
 
     println!("Starting  application...");
+    println!("Server running on PORT {:?}", app_port());
     HttpServer::new(move || {
         let cors = Cors::default()
             .allow_any_origin()

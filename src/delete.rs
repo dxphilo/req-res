@@ -18,6 +18,7 @@ pub async fn delete_responder(
     let response_data = ResponseData::new()
         .message("Request successfull")
         .status_code("200".to_string())
+        .method(crate::utils::Method::DELETE)
         .body(body_data)
         .queries(query)
         .headers(headers);
@@ -33,6 +34,7 @@ mod tests {
         test, App,
     };
     use serde::{Deserialize, Serialize};
+    use std::collections::HashMap;
 
     #[derive(Debug, Serialize, Deserialize)]
     pub struct Person {
@@ -79,7 +81,7 @@ mod tests {
             status_code: String,
             body_data: serde_json::Value,
             queries: serde_json::Value,
-            headers: Vec<(String, String)>,
+            headers: HashMap<String, String>,
         }
 
         let resp: ResponseBody = test::call_and_read_body_json(&mut app, req).await;

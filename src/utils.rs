@@ -29,9 +29,18 @@ pub struct QParams {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "UPPERCASE")]
+pub enum Method {
+    POST,
+    GET,
+    PUT,
+    DELETE,
+}
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ResponseData<'a> {
     pub message: &'a str,
     pub status_code: String,
+    pub method: Method,
     pub body_data: Cow<'a, str>,
     pub queries: QParams,
     pub headers: HashMap<String, String>,
@@ -42,6 +51,7 @@ impl<'a> ResponseData<'a> {
         ResponseData {
             message: "Success",
             status_code: String::from("200"),
+            method: Method::GET,
             body_data: String::new().into(),
             queries: QParams {
                 id: None,
@@ -58,6 +68,11 @@ impl<'a> ResponseData<'a> {
 
     pub fn status_code(mut self, status_code: String) -> Self {
         self.status_code = status_code;
+        self
+    }
+
+    pub fn method(mut self, req_method: Method) -> Self {
+        self.method = req_method;
         self
     }
 
@@ -137,6 +152,7 @@ mod tests {
         let response_data = ResponseData::new()
             .message("Custom message")
             .status_code("404".to_string())
+            .method(Method::POST)
             .body("Custom body".into())
             .queries(query_params)
             .headers(headers_map);

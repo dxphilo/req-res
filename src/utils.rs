@@ -4,11 +4,17 @@ use actix_web::{
 };
 use serde::{Deserialize, Serialize};
 use std::borrow::Cow;
+use std::collections::HashMap;
 
-pub fn get_req_headers<'a>(req: &'a HttpRequest) -> Vec<(&'a str, &'a str)> {
+pub fn get_req_headers<'a>(req: &'a HttpRequest) -> HashMap<String, String> {
     req.headers()
         .iter()
-        .map(|(name, value)| (name.as_str(), value.to_str().unwrap_or("")))
+        .map(|(name, value)| {
+            (
+                name.as_str().to_string(),
+                value.to_str().unwrap_or("").to_string(),
+            )
+        })
         .collect()
 }
 
@@ -28,7 +34,7 @@ pub struct ResponseData<'a> {
     pub status_code: String,
     pub body_data: Cow<'a, str>,
     pub queries: QParams,
-    pub headers: Vec<(&'a str, &'a str)>,
+    pub headers: HashMap<String, String>,
 }
 
 impl<'a> ResponseData<'a> {
@@ -41,7 +47,7 @@ impl<'a> ResponseData<'a> {
                 id: None,
                 message: None,
             },
-            headers: Vec::new(),
+            headers: HashMap::new(),
         }
     }
 
@@ -65,7 +71,7 @@ impl<'a> ResponseData<'a> {
         self
     }
 
-    pub fn headers(mut self, headers: Vec<(&'a str, &'a str)>) -> Self {
+    pub fn headers(mut self, headers: HashMap<String, String>) -> Self {
         self.headers = headers;
         self
     }
@@ -90,8 +96,11 @@ mod tests {
 
         // Assert the expected headers are present
         assert_eq!(headers.len(), 2);
-        assert_eq!(headers[0], ("content-type", "application/json"));
-        assert_eq!(headers[1], ("user-agent", "Actix-Web"));
+        assert_eq!(
+            headers.get("content-type"),
+            Some(&"application/json".to_string())
+        );
+        assert_eq!(headers.get("user-agent"), Some(&"Actix-Web".to_string()));
     }
 
     #[test]
@@ -114,13 +123,23 @@ mod tests {
             message: Some("Test message".to_string()),
         });
 
+        let headers_vec = vec![
+            ("content-type".to_string(), "application/json".to_string()),
+            // Add more headers as needed
+        ];
+    
+        let mut headers_map = HashMap::new();
+        for (key, value) in headers_vec {
+            headers_map.insert(key, value);
+        }    
+
         // Call the ResponseData builder methods
         let response_data = ResponseData::new()
             .message("Custom message")
             .status_code("404".to_string())
             .body("Custom body".into())
             .queries(query_params)
-            .headers(vec![("content-type", "application/json")]);
+            .headers(headers_map);
 
         // Assert the attributes of the ResponseData
         assert_eq!(response_data.message, "Custom message");
@@ -133,8 +152,8 @@ mod tests {
         );
         assert_eq!(response_data.headers.len(), 1);
         assert_eq!(
-            response_data.headers[0],
-            ("content-type", "application/json")
+            response_data.headers.get("content-type"),
+            Some(&"application/json".to_string())
         );
     }
 }

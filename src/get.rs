@@ -44,7 +44,7 @@ pub async fn get_responder(req: HttpRequest, bytes: Bytes, query: Query<QParams>
         .body(body_data)
         .queries(query)
         .headers(headers);
-
+    
     HttpResponse::Ok().json(response_data)
 }
 

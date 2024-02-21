@@ -1,7 +1,6 @@
-use crate::utils::{get_body_data, get_req_headers, QParams, ResponseData};
-use actix_web::{
-    get,
-    web::{Bytes, Query},
+use crate::utils::{get_body_data, get_req_headers, get_req_queries, ResponseData};
+use actix_web::{get,
+    web::Bytes,
     HttpRequest, HttpResponse,
 };
 use serde::{Deserialize, Serialize};
@@ -33,17 +32,20 @@ pub async fn health_check() -> HttpResponse {
 }
 
 #[get("/get")]
-pub async fn get_responder(req: HttpRequest, bytes: Bytes, query: Query<QParams>) -> HttpResponse {
-    let body_data = get_body_data(&bytes);
-
+pub async fn get_responder(req: HttpRequest, body: Bytes) -> HttpResponse {
+    let path = req.uri().path().to_string();
     let headers = get_req_headers(&req);
+    let body_str =  get_body_data(&body);
+
+    let query_params = get_req_queries(&req);
 
     let response_data = ResponseData::new()
         .message("Request successfull")
         .status_code("200".to_string())
         .method(crate::utils::Method::GET)
-        .body(body_data)
-        .queries(query)
+        .path(path)
+        .body(body_str)
+        .queries(query_params)
         .headers(headers);
 
     HttpResponse::Ok().json(response_data)
@@ -71,14 +73,8 @@ mod tests {
 
         let response_data: ResponseData =
             serde_json::from_slice(&resp_body).expect("Failed to parse response body");
+        // test query params
 
-        let query_params = QParams {
-            id: Some(123),
-            message: Some("test_message".to_string()),
-        };
-
-        assert_eq!(query_params.id, Some(123));
-        assert_eq!(query_params.message, Some("test_message".to_string()));
         assert_eq!(response_data.message, "Request successfull");
         assert_eq!(response_data.status_code, "200");
     }

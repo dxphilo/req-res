@@ -11,6 +11,7 @@ use crate::get::{get_responder, health_check};
 use crate::post::post_responder;
 use crate::put::put_responder;
 use actix_cors::Cors;
+use actix_web::middleware;
 use actix_web::{middleware::Logger, App, HttpServer};
 
 #[actix_web::main]
@@ -28,6 +29,7 @@ async fn main() -> std::io::Result<()> {
             .max_age(3600);
 
         App::new()
+            .wrap(middleware::Logger::default())
             .wrap(cors)
             .wrap(Logger::default())
             .service(health_check)

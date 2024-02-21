@@ -1,13 +1,14 @@
-use crate::utils::{get_body_data, get_req_headers, QParams, ResponseData};
+use crate::utils::{get_body_data, get_req_headers, get_req_queries, ResponseData};
 use actix_web::{
     put,
-    web::{Bytes, Query},
+    web::Bytes,
     HttpRequest, HttpResponse,
 };
 
 #[put("/put")]
-pub async fn put_responder(req: HttpRequest, bytes: Bytes, query: Query<QParams>) -> HttpResponse {
-    let body_data = get_body_data(&bytes);
+pub async fn put_responder(req: HttpRequest, body: Bytes) -> HttpResponse {
+    let body_data = get_body_data(&body);
+    let query = get_req_queries(&req);
 
     let headers = get_req_headers(&req);
 
@@ -50,10 +51,5 @@ mod tests {
         assert_eq!(response_data.message, "Request successfull");
         assert_eq!(response_data.status_code, "200");
         assert_eq!(response_data.body_data, "Test request body");
-        assert_eq!(response_data.queries.id, Some(123));
-        assert_eq!(
-            response_data.queries.message,
-            Some("test_message".to_string())
-        );
     }
 }

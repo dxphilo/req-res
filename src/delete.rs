@@ -1,26 +1,25 @@
-use crate::utils::{get_body_data, get_req_headers, QParams, ResponseData};
-use actix_web::{
-    delete,
-    web::{Bytes, Query},
-    HttpRequest, HttpResponse,
+use crate::utils::{get_body_data, get_req_headers, get_req_queries, ResponseData};
+use actix_web::{ delete, web::Bytes, HttpRequest, HttpResponse
 };
 
 #[delete("/delete")]
 pub async fn delete_responder(
     req: HttpRequest,
-    bytes: Bytes,
-    query: Query<QParams>,
+    body: Bytes,
 ) -> HttpResponse {
-    let body_data = get_body_data(&bytes);
-
+    let path = req.uri().path().to_string();
     let headers = get_req_headers(&req);
+    let body_str =  get_body_data(&body);
+
+    let query_params = get_req_queries(&req);
 
     let response_data = ResponseData::new()
         .message("Request successfull")
         .status_code("200".to_string())
         .method(crate::utils::Method::DELETE)
-        .body(body_data)
-        .queries(query)
+        .path(path)
+        .body(body_str)
+        .queries(query_params)
         .headers(headers);
 
     HttpResponse::Ok().json(response_data)

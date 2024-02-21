@@ -88,7 +88,7 @@ mod tests {
 
         assert_eq!(resp.message, "Request successfull".to_string());
         assert_eq!(resp.status_code, "200".to_string());
-        assert_eq!(resp.queries["id"], 123);
+        assert_eq!(resp.queries["id"], "123".to_string());
         assert_eq!(resp.queries["message"], "test_message".to_string());
         // TODO: Add assertions for headers if needed
     }

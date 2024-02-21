@@ -15,14 +15,14 @@ pub async fn post_responder(req: HttpRequest, bytes: Bytes) -> HttpResponse {
 
     let response_data = ResponseData::new()
         .message("Request successfull")
-        .status_code("200".to_string())
+        .status_code("201".to_string())
         .method(crate::utils::Method::POST)
         .path(path)
         .body(body_str)
         .queries(query_params)
         .headers(headers);
 
-    HttpResponse::Ok().json(response_data)
+    HttpResponse::Created().json(response_data)
 }
 
 #[cfg(test)]
